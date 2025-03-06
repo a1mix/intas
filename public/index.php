@@ -6,7 +6,9 @@ require_once '../src/Kernel.php';
 
 $map = [
     '/' => __DIR__ . '/../src/Pages/Hello.php',
-    '/schedule' => __DIR__ . '/../src/Pages/Scheduling.php',
+    '/schedule' => __DIR__ . '/../src/Pages/Schedule.php',
+    '/trip/add' => __DIR__ . '/../src/Pages/AddTrip.php',
+    '/api/schedule' => __DIR__ . '/../src/Api/ScheduleController.php',
 ];
 
 $path = strtok($_SERVER['REQUEST_URI'], '?');
