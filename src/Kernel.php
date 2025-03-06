@@ -21,20 +21,24 @@ require_once "../src/Database/Seeders/TripSeeder.php";
 
 final class Kernel {
     private PDO $pdo;
+
     private array $map;
+
+    private string $path;
 
     private bool $withMigrations;
 
     private bool $withSeeders;
 
-    public function __construct(array $map, bool $withMigrations = false, bool $withSeeders = false)
+    public function __construct(array $map, string $path, bool $withMigrations = false, bool $withSeeders = false)
     {
         $this->map = $map;
+        $this->path = $path;
         $this->withMigrations = $withMigrations;
         $this->withSeeders = $withSeeders;
     }
 
-    public function start() {
+    public function start(array $routeParams = []) {
         try {
 
             $this->fetchPdo();
@@ -49,6 +53,7 @@ final class Kernel {
     private function fetchPdo() {
         $this->pdo = Connection::get()->connect();
     }
+
     private function runMigrations() {
         (new create_couriers($this->pdo))->up();
         (new create_regions($this->pdo))->up();
@@ -63,6 +68,6 @@ final class Kernel {
 
     private function fetchPage()
     {
-        include $this->map[$_SERVER['REQUEST_URI']];
+        include $this->map[$this->path];
     }
 }

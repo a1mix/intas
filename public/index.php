@@ -9,11 +9,11 @@ $map = [
     '/schedule' => __DIR__ . '/../src/Pages/Scheduling.php',
 ];
 
-$path = $_SERVER['REQUEST_URI'];
+$path = strtok($_SERVER['REQUEST_URI'], '?');
 
 if (isset($map[$path])) {
     ob_start();
-    $kernel = new Kernel($map);
+    $kernel = new Kernel($map, $path);
     $kernel->start();
 
 } else {
