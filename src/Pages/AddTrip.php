@@ -44,7 +44,10 @@ $regions = $pdo->query("SELECT * FROM regions")->fetchAll(PDO::FETCH_ASSOC);
             <input type="date" name="departure_date" id="departure_date" class="form-control">
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">Добавить</button>
+        <button type="submit" class="btn btn-primary w-100" id="submitButton">
+            <span id="buttonText">Добавить</span>
+            <span id="buttonSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+        </button>
     </form>
 
     <div id="responseMessage" class="mt-3"></div>
@@ -54,6 +57,14 @@ $regions = $pdo->query("SELECT * FROM regions")->fetchAll(PDO::FETCH_ASSOC);
     $(document).ready(function() {
         $('#addTripForm').on('submit', function(e) {
             e.preventDefault();
+
+            const buttonText = $('#buttonText');
+            const buttonSpinner = $('#buttonSpinner');
+            const submitButton = $('#submitButton');
+
+            submitButton.prop('disabled', true);
+            buttonText.hide();
+            buttonSpinner.show();
 
             $.ajax({
                 url: '/api/schedule',
@@ -69,6 +80,11 @@ $regions = $pdo->query("SELECT * FROM regions")->fetchAll(PDO::FETCH_ASSOC);
                     $('#responseMessage').html(
                         '<div class="alert alert-danger">' + errorMessage + '</div>'
                     );
+                },
+                complete: function() {
+                    submitButton.prop('disabled', false);
+                    buttonText.show();
+                    buttonSpinner.hide();
                 }
             });
         });
